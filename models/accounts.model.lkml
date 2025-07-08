@@ -1,6 +1,6 @@
 connection: "default_bigquery_connection"
 
-include: "/views/acc*.view.lkml"
+include: "/views/*.view.lkml"
 
 explore: accounts {
   label: "Company Insights"
