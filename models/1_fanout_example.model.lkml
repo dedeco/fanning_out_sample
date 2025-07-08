@@ -1,25 +1,23 @@
-# models/2_full_outer_join.model.lkml
-# This model uses the FULL OUTER JOIN ON FALSE technique to prevent fan-out.
+# models/1_fanout_example.model.lkml
+# This model demonstrates the fan-out problem.
 
 connection: "default_bigquery_connection"
 include: "/views/*.view.lkml"
 
-explore: full_outer_join_solution {
+explore: fanout_example {
   view_name: accounts
-  label: "Full Outer Join Solution"
-  description: "Prevents fan-out by joining Managers and Products using a FULL OUTER JOIN with a false condition. This allows for correct, un-fanned-out measures from all views in one Explore."
+  label: "Fan-Out Example"
+  description: "Illustrates how joining multiple one-to-many views (Managers, Products) to a central view (Accounts) causes measures to be double-counted, leading to incorrect results."
 
   join: managers {
-    type: full_outer
+    type: left_outer
     relationship: one_to_many
-    # By joining on a false condition, we avoid the fan-out.
-    # Looker's symmetric aggregates will handle the measure calculations correctly.
-    sql_on: 1=0 ;;
+    sql_on: ${accounts.name} = ${managers.assigned_account} ;;
   }
 
   join: products {
-    type: full_outer
+    type: left_outer
     relationship: one_to_many
-    sql_on: 1=0 ;;
+    sql_on: ${accounts.name} = ${products.customer_account} ;;
   }
 }
