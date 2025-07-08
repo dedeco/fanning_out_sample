@@ -5,46 +5,39 @@
 connection: "default_bigquery_connection"
 include: "/views/*.view.lkml"
 
-# Explore #1: Start with Accounts
-explore: accounts {
-  label: "Company Insights"
-  description: "Explore core company data, including employee counts and account tiers. Use this for high-level business analysis."
+explore: advanced_coalesce_solution {
+  # We start from a dummy view, or any view, it doesn't matter.
+  # The real data comes from the joins.
+  from: accounts
+  label: "🏆 Advanced Coalesce Solution"
+  description: "The most robust solution. Prevents fan-out and allows dimensions from associated tables to be used correctly with measures from any fact table."
 
-  # Users can still access related data by joining from here.
-  # The fan-out is controlled because the user chooses when to join.
-  join: managers {
-    type: left_outer
+  # Step 1: Bring in the fact tables with FULL OUTER JOIN on a false condition.
+  # These are hidden because users will get data from the associated views below.
+  join: managers_base {
+    from: managers
+    type: full_outer
     relationship: one_to_many
-    sql_on: ${accounts.name} = ${managers.assigned_account} ;;
+    sql_on: 1=0 ;;
   }
 
-  join: products {
-    type: left_outer
+  join: products_base {
+    from: products
+    type: full_outer
     relationship: one_to_many
-    sql_on: ${accounts.name} = ${products.customer_account} ;;
+    sql_on: 1=0 ;;
   }
-}
 
-# Explore #2: Start with Managers
-explore: managers {
-  label: "Account Management"
-  description: "View data on account managers and their assigned accounts."
-
-  join: accounts {
+  # Step 2: Join the dimension tables using COALESCE to link to the fact tables.
+  # This is the key trick.
+  join: associated_account {
+    from: accounts
     type: left_outer
     relationship: many_to_one
-    sql_on: ${managers.assigned_account} = ${accounts.name} ;;
-  }
-}
-
-# Explore #3: Start with Products
-explore: products {
-  label: "Product Adoption"
-  description: "Analyze product catalog data and see which accounts are using which products."
-
-  join: accounts {
-    type: left_outer
-    relationship: many_to_one
-    sql_on: ${products.customer_account} = ${accounts.name} ;;
+    # Look for an account name in either of the base fact tables.
+    sql_on: ${associated_account.name} = COALESCE(
+        ${managers_base.assigned_account},
+        ${products_base.customer_account}
+      ) ;;
   }
 }
