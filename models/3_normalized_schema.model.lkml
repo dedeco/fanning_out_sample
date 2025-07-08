@@ -9,7 +9,7 @@ explore: advanced_coalesce_solution {
   # We start from a dummy view, or any view, it doesn't matter.
   # The real data comes from the joins.
   from: accounts
-  label: "🏆 Advanced Coalesce Solution"
+  label: "Advanced Coalesce Solution"
   description: "The most robust solution. Prevents fan-out and allows dimensions from associated tables to be used correctly with measures from any fact table."
 
   # Step 1: Bring in the fact tables with FULL OUTER JOIN on a false condition.
