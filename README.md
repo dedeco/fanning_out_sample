@@ -47,6 +47,9 @@ LEFT JOIN `demo.products`  AS products ON accounts.name = products.account_name
 GROUP BY
  ...
 ```
+**Explore:**
+
+![image info](./images/first_approach.png)
 
 ### **2. The FULL OUTER JOIN ON FALSE Solution (full\_outer\_join\_solution)**
 
@@ -78,6 +81,9 @@ FULL OUTER JOIN `demo.products`  AS products ON 1=0
 GROUP BY
 ...
 ```
+**Explore:**
+
+![image info](./images/second_approach.png)
 
 ### **3\. The Advanced COALESCE Solution (advanced\_coalesce\_solution)**
 
@@ -123,3 +129,7 @@ FULL OUTER JOIN orders AS orders_base ON 1=0
 LEFT JOIN `demo.accounts`  AS associated_account ON associated_account.name = COALESCE(...)
 ....
 ```
+
+**Explore:**
+
+![image info](./images/third_approach.png)
