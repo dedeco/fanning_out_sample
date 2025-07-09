@@ -1,5 +1,3 @@
-Of course\! Here is the updated `README.md` with space in each approach to share the SQL that Looker will produce.
-
 # **Looker Fan-Out Solutions: A Practical Guide**
 
 This LookML project provides a hands-on demonstration of various data modeling techniques to solve the common "fan-out" problem in Looker. The models are based on the excellent strategies outlined in the Google Cloud Community article: [Outer Join on False (or How I learned to stop fanning out and...)](https://www.googlecloudcommunity.com/gc/Modeling/Outer-Join-on-False-or-How-I-learned-to-stop-fanning-out-and/td-p/573726).
