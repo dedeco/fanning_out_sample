@@ -80,30 +80,33 @@ GROUP BY
 ...
 ```
 
-### **3. The Advanced COALESCE Solution (advanced\_coalesce\_solution)**
+### **3\. The Advanced COALESCE Solution (advanced\_coalesce\_solution)**
 
-  * **File:** `models/3_normalized_schema.model.lkml`
-  * **Explore Label:** Advanced Coalesce Solution
+* **File:** models/3\_normalized\_schema.model.lkml  
+* **Explore Label:** Advanced Coalesce Solution
 
-This is the most robust and flexible pattern, also derived from the article. It builds upon the `FULL OUTER JOIN ON FALSE` technique.
+This is the most robust and flexible pattern, also derived from the article. It builds upon the FULL OUTER JOIN ON FALSE technique. As the article highlights in the "It gets better\!" section, this pattern is incredibly adaptable. We've extended the initial model by adding two new fact tables, pageviews and orders.
 
-1.  **Fact Tables (`managers_base`, `products_base`)**: We first bring in the `managers` and `products` views using the `full_outer` join on a false condition, but we give them aliases.
-2.  **Dimension Table (`associated_account`)**: We then `LEFT JOIN` the `accounts` view again, but this time we use a `COALESCE()` function in the `sql_on` parameter. This function intelligently finds the correct account to link to, whether the row of data came from the `managers` join or the `products` join.
+1. **Fact Tables (**managers\_base**,** products\_base**,** pageviews\_base**,** orders\_base**)**: We bring in all fact tables using the full\_outer join on a false condition (1=0), giving them unique aliases.  
+2. **Dimension Table (**associated\_account**)**: We then LEFT JOIN the accounts view. The sql\_on uses a COALESCE() function that now checks for an account name across all four base tables, intelligently linking the account dimension to any related fact data.
 
-**Specifying the problem:**
-While the `FULL OUTER JOIN ON FALSE` solution works well, it can become cumbersome to manage if you have many one-to-many relationships. The Advanced COALESCE solution provides a more scalable and organized way to handle these complex scenarios. It creates a "normalized" Explore where each of the "many" tables is joined back to the central "one" table independently.
-
+Specifying the problem:  
+While the FULL OUTER JOIN ON FALSE solution works well, it can become cumbersome to manage if you have many one-to-many relationships. The Advanced COALESCE solution provides a more scalable and organized way to handle these complex scenarios. It creates a "normalized" Explore where each of the "many" tables is joined back to the central "one" table independently.  
 **To see the solution in action:**
 
-1.  Open the "Advanced Coalesce Solution" Explore.
-2.  Select the measure **Total Employees** from the Associated Account view.
-3.  Add the dimension **Name** from the Managers Base view.
-4.  Add the dimension **Name** from the Products Base view.
+1. Open the "Advanced Coalesce Solution" Explore.  
+2. Select the dimension **Name** from the Associated Account view.  
+3. Select measures from the various fact tables, for example:  
+   * **Total Employees** from Associated Account  
+   * **Distinct Manager Count** from Managers Base  
+   * **Distinct Product Count** from Products Base  
+   * **Count** from Pageviews Base  
+   * **Total Amount** from Orders Base
 
-This pattern creates a clean, reliable Explore where dimensions from the `accounts` view can be used with measures from any of the joined views without any risk of fanning out. This is the recommended approach for complex models. ✨
+This pattern creates a clean, reliable Explore where dimensions from the accounts view can be used with measures from any of the joined views without any risk of fanning out. This is the recommended approach for complex models. ✨
 
 **Looker-generated SQL:**
 
 ```sql
-[SQL code will be displayed here]
-```
+
+...
