@@ -109,7 +109,7 @@ While the FULL OUTER JOIN ON FALSE solution works well, it can become cumbersome
    * **Count** from Pageviews Base  
    * **Total Amount** from Orders Base
 
-This pattern creates a clean, reliable Explore where dimensions from the accounts view can be used with measures from any of the joined views without any risk of fanning out. This is the recommended approach for complex models. ✨
+This pattern creates a clean, reliable Explore where dimensions from the accounts view can be used with measures from any of the joined views without any risk of fanning out. This is the recommended approach for complex models. 
 
 **Looker-generated SQL:**
 
