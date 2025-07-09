@@ -25,6 +25,7 @@ This project contains three distinct models, each with its own Explore, to illus
 
 This model uses simple `LEFT JOINs` to connect `accounts`, `managers`, and `products`. It is designed to **demonstrate the fan-out problem**.
 
+
 **Specifying the problem:**
 The issue arises because the joins create a row for every possible combination of a manager and a product for each account. This inflates the number of rows and leads to incorrect calculations for measures on the `accounts` table.
 
@@ -90,8 +91,9 @@ This is the most robust and flexible pattern, also derived from the article. It 
 1. **Fact Tables (**managers\_base**,** products\_base**,** pageviews\_base**,** orders\_base**)**: We bring in all fact tables using the full\_outer join on a false condition (1=0), giving them unique aliases.  
 2. **Dimension Table (**associated\_account**)**: We then LEFT JOIN the accounts view. The sql\_on uses a COALESCE() function that now checks for an account name across all four base tables, intelligently linking the account dimension to any related fact data.
 
-Specifying the problem:  
+**Specifying the problem**:  
 While the FULL OUTER JOIN ON FALSE solution works well, it can become cumbersome to manage if you have many one-to-many relationships. The Advanced COALESCE solution provides a more scalable and organized way to handle these complex scenarios. It creates a "normalized" Explore where each of the "many" tables is joined back to the central "one" table independently.  
+
 **To see the solution in action:**
 
 1. Open the "Advanced Coalesce Solution" Explore.  
@@ -108,5 +110,18 @@ This pattern creates a clean, reliable Explore where dimensions from the account
 **Looker-generated SQL:**
 
 ```sql
-
+WITH pageviews AS (...
+      )
+  ,  orders AS (...
+      LEFT JOIN demo.products AS pr ON o.product = pr.name
+)
+SELECT
 ...
+FROM `demo.accounts`  AS advanced_coalesce_solution
+FULL OUTER JOIN `demo.managers`  AS managers_base ON 1=0
+FULL OUTER JOIN `demo.products`  AS products_base ON 1=0
+FULL OUTER JOIN pageviews AS pageviews_base ON 1=0
+FULL OUTER JOIN orders AS orders_base ON 1=0
+LEFT JOIN `demo.accounts`  AS associated_account ON associated_account.name = COALESCE(...)
+....
+```
