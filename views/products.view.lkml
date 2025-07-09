@@ -3,20 +3,20 @@
 view: products {
   sql_table_name: `demo.products` ;;
 
-  dimension: product_id {
+  dimension: id {
     primary_key: yes
-    hidden: yes
-    sql: CONCAT(${TABLE}.account, '-', ${TABLE}.product) ;; # Create a unique key
+    type: number
+    sql: ${TABLE}.id ;;
   }
 
   dimension: name {
     label: "Product Name"
-    sql: ${TABLE}.product ;;
+    sql: ${TABLE}.name ;;
   }
 
-  dimension: customer_account {
+  dimension: account_name {
     label: "Account with Product"
-    sql: ${TABLE}.account ;;
+    sql: ${TABLE}.account_name ;;
   }
 
   measure: product_assignments {
@@ -33,6 +33,6 @@ view: products {
   measure: customer_count {
     label: "Number of Accounts with a Product"
     type: count_distinct
-    sql: ${customer_account} ;;
+    sql: ${account_name} ;;
   }
 }

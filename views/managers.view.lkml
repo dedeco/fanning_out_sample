@@ -3,20 +3,20 @@
 view: managers {
   sql_table_name: `demo.managers` ;;
 
-  dimension: manager_id {
+  dimension: id {
     primary_key: yes
-    hidden: yes
-    sql: CONCAT(${TABLE}.account, '-', ${TABLE}.manager) ;; # Create a unique key
+    type: number
+    sql: ${TABLE}.id ;;
   }
 
   dimension: name {
     label: "Manager Name"
-    sql: ${TABLE}.manager ;;
+    sql: ${TABLE}.name ;;
   }
 
-  dimension: assigned_account {
+  dimension: account_name {
     label: "Assigned Account"
-    sql: ${TABLE}.account ;;
+    sql: ${TABLE}.account_name ;;
   }
 
   measure: total_assignments {
@@ -33,6 +33,6 @@ view: managers {
   measure: managed_account_count {
     label: "Number of Managed Accounts"
     type: count_distinct
-    sql: ${assigned_account} ;;
+    sql: ${account_name} ;;
   }
 }

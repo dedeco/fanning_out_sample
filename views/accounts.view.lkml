@@ -3,18 +3,18 @@
 view: accounts {
   sql_table_name: `demo.accounts` ;;
 
-  dimension: account_id {
+  dimension: id {
     primary_key: yes
-    hidden: yes # Hide to give users a cleaner experience
-    sql: ${TABLE}.account ;;
+    type: number
+    sql: ${TABLE}.id ;;
   }
 
   dimension: name {
     label: "Account Name"
-    sql: ${TABLE}.account ;;
+    sql: ${TABLE}.name ;;
     link: {
       label: "View Account Dashboard"
-      url: "/dashboards/123?Account+Name={{ value | url_encode }}" # Example link to a dashboard
+      url: "/dashboards/123?Account+Name={{ value | url_encode }}"
     }
   }
 

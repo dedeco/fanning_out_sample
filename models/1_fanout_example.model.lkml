@@ -12,12 +12,12 @@ explore: fanout_example {
   join: managers {
     type: left_outer
     relationship: one_to_many
-    sql_on: ${accounts.name} = ${managers.assigned_account} ;;
+    sql_on: ${accounts.name} = ${managers.account_name} ;;
   }
 
   join: products {
     type: left_outer
     relationship: one_to_many
-    sql_on: ${accounts.name} = ${products.customer_account} ;;
+    sql_on: ${accounts.name} = ${products.account_name} ;;
   }
 }

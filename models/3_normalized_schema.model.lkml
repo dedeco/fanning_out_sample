@@ -36,8 +36,8 @@ explore: advanced_coalesce_solution {
     relationship: many_to_one
     # Look for an account name in either of the base fact tables.
     sql_on: ${associated_account.name} = COALESCE(
-        ${managers_base.assigned_account},
-        ${products_base.customer_account}
+        ${managers_base.account_name},
+        ${products_base.account_name}
       ) ;;
   }
 }
