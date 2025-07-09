@@ -2,6 +2,8 @@ view: orders {
   derived_table: {
     sql:
       SELECT
+        -- Create a unique key for the primary key
+        CAST(o.order_date AS STRING) || '-' || o.product || '-' || CAST(o.user_id AS STRING) || '-' || CAST(o.amount AS STRING) as order_id,
         o.order_date,
         o.product,
         o.amount,
@@ -10,6 +12,13 @@ view: orders {
       FROM demo.orders AS o
       LEFT JOIN demo.products AS pr ON o.product = pr.name
       ;;
+  }
+
+  dimension: order_id {
+    primary_key: yes
+    type: string
+    hidden: yes
+    sql: ${TABLE}.order_id ;;
   }
 
   dimension: order_date {
@@ -40,7 +49,8 @@ view: orders {
   }
 
   measure: count {
-    type: count
+    type: count_distinct
+    sql: ${order_id} ;;
     label: "Total Orders"
   }
 
