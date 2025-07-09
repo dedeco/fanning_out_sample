@@ -1,5 +1,3 @@
-# views/managers.view.lkml
-
 view: managers {
   sql_table_name: `demo.managers` ;;
 

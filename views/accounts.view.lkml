@@ -1,5 +1,3 @@
-# views/accounts.view.lkml
-
 view: accounts {
   sql_table_name: `demo.accounts` ;;
 
